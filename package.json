@@ -1,0 +1,21 @@
+{
+  "name": "icons-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scrap-icons": "node scrap-v2.js"
+  },
+  "keywords": [],
+  "author": "Arnaud PFUNDSTEIN",
+  "license": "MIT",
+  "devDependencies": {
+    "axios": "^1.3.4",
+    "cheerio": "1.0.0-rc.12",
+    "puppeteer": "^19.7.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
