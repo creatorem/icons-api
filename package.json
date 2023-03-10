@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "scrap-icons": "node scraper.js"
+    "scrap": "node scraper.js"
   },
   "keywords": [],
   "author": "Arnaud PFUNDSTEIN",

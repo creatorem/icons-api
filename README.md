@@ -1,6 +1,7 @@
 # Icons REST API
 
-REST API of the icons used in [react-icons](https://react-icons.github.io/react-icons) repository.
+REST API of svg icons.
+Icons are scraped from the [react-icons](https://react-icons.github.io/react-icons) project and the [Material UI](https://mui.com/material-ui/material-icons/) icons library.
 
 ## Icons
 
@@ -10,7 +11,7 @@ REST API of the icons used in [react-icons](https://react-icons.github.io/react-
 | [Font Awesome](https://fontawesome.com/)                                | [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)                                 | 5.15.4                                   |  1612 |
 | [Ionicons 4](https://ionicons.com/)                                     | [MIT](https://github.com/ionic-team/ionicons/blob/master/LICENSE)                                 | 4.6.3                                    |   696 |
 | [Ionicons 5](https://ionicons.com/)                                     | [MIT](https://github.com/ionic-team/ionicons/blob/master/LICENSE)                                 | 5.5.0                                    |  1332 |
-| [Material Design icons](http://google.github.io/material-design-icons/) | [Apache License Version 2.0](https://github.com/google/material-design-icons/blob/master/LICENSE) | 4.0.0-12-g63c5cb3060                     |  3650 |
+| [Material Design icons](http://google.github.io/material-design-icons/) | [Apache License Version 2.0](https://github.com/google/material-design-icons/blob/master/LICENSE) | 4.0.0-12-g63c5cb3060                     | 10554 |
 | [Typicons](http://s-ings.com/typicons/)                                 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)                                   | 2.1.2                                    |   336 |
 | [Github Octicons icons](https://octicons.github.com/)                   | [MIT](https://github.com/primer/octicons/blob/master/LICENSE)                                     | 8.5.0                                    |   184 |
 | [Feather](https://feathericons.com/)                                    | [MIT](https://github.com/feathericons/feather/blob/master/LICENSE)                                | 4.28.0                                   |   286 |
