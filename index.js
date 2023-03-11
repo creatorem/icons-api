@@ -25,6 +25,19 @@ const getFileContent = (source) => {
 
 const iconFolders = getDirectories('./icons');
 
+const limitLengthArray = (arr, start = undefined, end = undefined) => {
+    if (end !== undefined) arr = arr.slice(0, end);
+    if (start !== undefined) arr = arr.slice(start);
+    return arr;
+};
+
+const searchIcons = (lib, search) => {
+    const children = fs.readdirSync(`./icons/${lib}`);
+    if (!search) return children;
+    const searchValue = search.toLowerCase().replace(/\s+/g, '');
+    return children.filter((child) => child.toLowerCase().includes(searchValue));
+};
+
 /**
  * Get name of icon without variant.
  *
@@ -105,7 +118,8 @@ const getSingleIconData = (lib, name, rawName) => {
 };
 
 app.get('/api/v1/sorted/:lib', (req, res) => {
-    const { lib, name } = req.params;
+    const { lib } = req.params;
+    const { search, start, end } = req.query;
 
     if (!iconFolders.includes(lib)) {
         res.status(404).send({
@@ -114,9 +128,17 @@ app.get('/api/v1/sorted/:lib', (req, res) => {
         return;
     }
 
-    const iconsName = getFiles(`./icons/${lib}`).map((file) => file.replace('.svg', ''));
-    const icons = iconsName.map((name) => getVariantIconData(lib, name));
-    res.status(200).send(icons);
+    if (typeof search === 'string' && search.length < 3) {
+        res.status(403).send({
+            error: 'Enter at least 3 characters.',
+        });
+        return;
+    }
+
+    const matchedIcons = limitLengthArray(searchIcons(lib, search), undefined, end);
+    const icons = matchedIcons.map((name) => getVariantIconData(lib, name.replace('.svg', '')));
+
+    res.status(200).send(limitLengthArray(icons, start, end));
 });
 
 app.get('/api/v1/sorted/:lib/:name', (req, res) => {
@@ -141,7 +163,8 @@ app.get('/api/v1/sorted/:lib/:name', (req, res) => {
 });
 
 app.get('/api/v1/all/:lib', (req, res) => {
-    const { lib, name } = req.params;
+    const { lib } = req.params;
+    const { search, start, end } = req.query;
 
     if (!iconFolders.includes(lib)) {
         res.status(404).send({
@@ -150,22 +173,54 @@ app.get('/api/v1/all/:lib', (req, res) => {
         return;
     }
 
-    const directories = getDirectories(`./icons/${lib}`);
+    let icons = [];
 
-    const icons = _.flatten(
-        directories.map((rawName) => {
-            const files = getFiles(`./icons/${lib}/${rawName}`);
-            return files.map((file) => {
-                const name = file.replace('.svg', '');
-                return getSingleIconData(lib, name, rawName);
+    if (search) {
+        if (search.length < 3) {
+            res.status(403).send({
+                error: 'Enter at least 3 characters.',
             });
-        })
-    );
+            return;
+        }
 
-    const files = getFiles(`./icons/${lib}`);
-    icons.push(...files.map((file) => getSingleIconData(lib, file.replace('.svg', ''), null)));
+        const matchedIcons = limitLengthArray(searchIcons(lib, search), undefined, end);
+        icons = _.flatten(
+            matchedIcons.map((child) => {
+                if (
+                    fs.existsSync(`./icons/${lib}/${child}`) &&
+                    fs.statSync(`./icons/${lib}/${child}`).isDirectory()
+                ) {
+                    const files = getFiles(`./icons/${lib}/${child}`);
+                    return files.map((file) => {
+                        const name = file.replace('.svg', '');
+                        return getSingleIconData(lib, name, child);
+                    });
+                }
+                return getSingleIconData(lib, child.replace('.svg', ''), null);
+            })
+        );
+    } else {
+        const directories = limitLengthArray(getDirectories(`./icons/${lib}`), undefined, end);
 
-    res.status(200).send(icons);
+        icons = _.flatten(
+            directories.map((rawName) => {
+                const files = getFiles(`./icons/${lib}/${rawName}`);
+                return files.map((file) => {
+                    const name = file.replace('.svg', '');
+                    return getSingleIconData(lib, name, rawName);
+                });
+            })
+        );
+
+        const files = limitLengthArray(
+            getFiles(`./icons/${lib}`),
+            undefined,
+            end ? end - icons.length : undefined
+        );
+        icons.push(...files.map((file) => getSingleIconData(lib, file.replace('.svg', ''), null)));
+    }
+
+    res.status(200).send(limitLengthArray(icons, start, end));
 });
 
 app.get('/api/v1/all/:lib/:name', (req, res) => {
