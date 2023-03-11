@@ -250,4 +250,6 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
     res.status(200).send(icon);
 });
 
+console.log( fs.readdirSync('./icons') )
+
 app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));

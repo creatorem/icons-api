@@ -35,6 +35,55 @@ Icons are scraped from the [react-icons](https://react-icons.github.io/react-ico
 | [Themify Icons](https://github.com/lykmapipo/themify-icons)             | [MIT](https://github.com/thecreation/standard-icons/blob/master/modules/themify-icons/LICENSE)    | v0.1.2                                   |   352 |
 | [Radix Icons](https://icons.radix-ui.com)                               | [MIT](https://github.com/radix-ui/icons/blob/master/LICENSE)                                      | @radix-ui/react-icons@1.0.3-30-g237cd76  |   318 |
 
+## Endpoints
+
+The *lib* parameter can take the following values : 
+- `ai`
+- `bi`
+- `bs`
+- `cg`
+- `ci`
+- `di`
+- `fa`
+- `fc`
+- `fi`
+- `gi`
+- `go`
+- `gr`
+- `hi`
+- `hi2`
+- `im`
+- `io`
+- `io5`
+- `md`
+- `ri`
+- `rx`
+- `si`
+- `sl`
+- `tb`
+- `tfi`
+- `ti`
+- `vsc`
+- `wi`
+
+The *name* parameter represents the name of an icon.
+
+**Sorted API**
+This endpoints provide icons grouped with their variants.
+- `/api/v1/sorted/:lib`
+- `/api/v1/sorted/:lib/:name`
+
+**Raw API**
+This endpoints provide to single icons.
+- `/api/v1/all/:lib`
+- `/api/v1/all/:lib/:name`
+
+## Todo
+- Separate `md` and `mui`.
+- Add link to lib in the rest api.
+- Use `typescript`.
+- Check security reflexes.
+
 ## Licence
 
 MIT
