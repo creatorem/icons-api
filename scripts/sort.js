@@ -13,10 +13,6 @@ const getFiles = (source) => {
     return fs.readdirSync(source);
 };
 
-const capitalize = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
 const iconFolders = getDirectories('./icons');
 
 for (const slug of iconFolders) {
@@ -37,7 +33,7 @@ for (const slug of iconFolders) {
 
     for (rawName in sortedIconTable) {
         if (sortedIconTable[rawName].length <= 1) continue;
-        const folderName = capitalize(_.camelCase(rawName));
+        const folderName = _.upperFirst(_.camelCase(rawName));
         const newDirPath = `./icons/${slug}/${folderName}`;
 
         if (!fs.existsSync(newDirPath)) {
