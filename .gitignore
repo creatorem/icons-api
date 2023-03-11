@@ -8,6 +8,7 @@ lerna-debug.log*
 
 # icons
 /icons
+/icons/**/*
 
 .DS_Store
 

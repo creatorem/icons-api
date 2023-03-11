@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "scrap": "node scraper.js"
+    "build": "node .",
+    "scrap": "node scripts/scraper.js",
+    "sort": "node scripts/sort.js"
   },
   "keywords": [],
   "author": "Arnaud PFUNDSTEIN",
@@ -14,6 +15,7 @@
     "puppeteer": "^19.7.3"
   },
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "lodash": "^4.17.21"
   }
 }

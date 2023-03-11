@@ -8,30 +8,6 @@ const REACT_ICONS_BASE_URL = 'https://react-icons.github.io';
 const HOME_SLUG = '/react-icons';
 const iconPageSlugs = [];
 
-const getVariants = (slug) => {
-    if (slug === 'md') {
-        return ['filled', 'outlined', 'rounded', 'sharp', 'two-tone'];
-    } else if (slug === 'reg') {
-        return ['reg'];
-    } else if (slug === 'filled') {
-        return ['filled'];
-    } else if (slug === 'tfi') {
-        return ['alt'];
-    }
-
-    const defaultVariants = ['fill', 'outline'];
-
-    if (slug === 'io5') {
-        defaultVariants.push('sharp');
-    } else if (slug === 'ri') {
-        defaultVariants.push('line');
-    } else if (slug === 'ai') {
-        defaultVariants.push('twotone');
-    }
-
-    return defaultVariants;
-};
-
 /**
  * Get the url of a react-icons page
  *
@@ -60,7 +36,7 @@ const queryPageElements = async (url, selector, callback, waitFor = null) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(url);
-        await page.waitForSelector(waitFor ?? selector, { timeout: 1000 });
+        await page.waitForSelector(waitFor ?? selector);
 
         const elements = await page.$$(selector);
 
@@ -92,9 +68,7 @@ const writeIconFile = (slug, name, icon) => {
     });
 };
 
-const scrapReactIcons = async (slugUrl) => {
-    const slug = findSlug(slugUrl);
-
+const scrapReactIcons = async (slug, slugUrl) => {
     await queryPageElements(
         getUrl(slugUrl),
         'div.icons > .item',
@@ -124,10 +98,10 @@ const scrapMaterialDesignIcons = async () => {
         async (el) => {
             const variant = await el.evaluate((element) => element.value);
             variants.push(variant.replace(/\s+/g, '+'));
-        }
+        },
+        null,
+        5000
     );
-
-    console.log(variants);
 
     for (const variant of variants) {
         await queryPageElements(
@@ -164,11 +138,13 @@ const main = async () => {
     let i = 0;
     for (const slugUrl of iconPageSlugs) {
         console.log(++i + ' / ' + iconPageSlugs.length);
+        const slug = findSlug(slugUrl);
         if (slug === 'md') {
             await scrapMaterialDesignIcons();
             continue;
         }
-        await scrapReactIcons(slugUrl);
+        continue;
+        await scrapReactIcons(slug, slugUrl);
     }
 
     console.timeEnd('query icons');
