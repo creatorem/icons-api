@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+// @ts-ignore
 const fs = require('fs');
 
 const dir = './icons';
@@ -6,7 +7,7 @@ const dir = './icons';
 const MATERIAL_DESIGN_ICONS_URL = 'https://mui.com/material-ui/material-icons/?theme=';
 const REACT_ICONS_BASE_URL = 'https://react-icons.github.io';
 const HOME_SLUG = '/react-icons';
-const iconPageSlugs = [];
+const iconPageSlugs: string[] = [];
 
 /**
  * Get the url of a react-icons page
@@ -14,7 +15,7 @@ const iconPageSlugs = [];
  * @param string slug
  * @returns
  */
-const getUrl = (slug) => REACT_ICONS_BASE_URL + slug;
+const getUrl = (slug: string) => REACT_ICONS_BASE_URL + slug;
 
 /**
  * Get the url of a mui page
@@ -22,8 +23,8 @@ const getUrl = (slug) => REACT_ICONS_BASE_URL + slug;
  * @param string slug
  * @returns
  */
-const getMdUrl = (variant) => MATERIAL_DESIGN_ICONS_URL + variant;
-const findSlug = (str) => {
+const getMdUrl = (variant: string) => MATERIAL_DESIGN_ICONS_URL + variant;
+const findSlug = (str: string) => {
     const slug = str.replace(/^\/react-icons\/icons\?name=([\S]+)$/g, '$1');
     if (!slug) {
         throw new Error('Invalid slug: ' + slug);
@@ -31,7 +32,12 @@ const findSlug = (str) => {
     return slug;
 };
 
-const queryPageElements = async (url, selector, callback, waitFor = null) => {
+const queryPageElements = async (
+    url: string,
+    selector: string,
+    callback: (el: any, page: any) => void,
+    waitFor: string | null = null
+) => {
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
@@ -50,7 +56,7 @@ const queryPageElements = async (url, selector, callback, waitFor = null) => {
     }
 };
 
-const createFileStructure = (slugs) => {
+const createFileStructure = (slugs: string[]): void => {
     console.log(slugs);
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
@@ -62,13 +68,13 @@ const createFileStructure = (slugs) => {
     }
 };
 
-const writeIconFile = (slug, name, icon) => {
-    fs.appendFile(`icons/${slug}/${name}.svg`, icon, function (err) {
+const writeIconFile = (slug: string, name: string, icon:string):void => {
+    fs.appendFile(`icons/${slug}/${name}.svg`, icon, function (err: Error) {
         if (err) throw err;
     });
 };
 
-const scrapReactIcons = async (slug, slugUrl) => {
+const scrapReactIcons = async (slug:string, slugUrl:string) => {
     await queryPageElements(
         getUrl(slugUrl),
         'div.icons > .item',
@@ -80,9 +86,9 @@ const scrapReactIcons = async (slug, slugUrl) => {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 i++;
             }
-            const icon = await iconEl.evaluate((element) => element.outerHTML);
+            const icon = await iconEl.evaluate((element:any) => element.outerHTML);
             const nameEl = await el.$('.name');
-            const name = await nameEl.evaluate((element) => element.innerText);
+            const name = await nameEl.evaluate((element:any) => element.innerText);
             writeIconFile(slug, name, icon);
         },
         'div.icons > .item svg'
@@ -90,17 +96,16 @@ const scrapReactIcons = async (slug, slugUrl) => {
 };
 
 const scrapMaterialDesignIcons = async () => {
-    const variants = [];
+    const variants: string[] = [];
 
     await queryPageElements(
         MATERIAL_DESIGN_ICONS_URL,
         '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(1) input[type="radio"]',
         async (el) => {
-            const variant = await el.evaluate((element) => element.value);
+            const variant = await el.evaluate((element:any) => element.value);
             variants.push(variant.replace(/\s+/g, '+'));
         },
-        null,
-        5000
+        null
     );
 
     for (const variant of variants) {
@@ -109,9 +114,9 @@ const scrapMaterialDesignIcons = async () => {
             '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(3) > span',
             async (el) => {
                 const iconEl = await el.$('svg');
-                const icon = await iconEl.evaluate((element) => element.outerHTML);
+                const icon = await iconEl.evaluate((element:any) => element.outerHTML);
                 const nameEl = await el.$('div div');
-                const name = await nameEl.evaluate((element) => element.innerText);
+                const name = await nameEl.evaluate((element:any) => element.innerText);
                 writeIconFile('md', 'Md' + name, icon);
             },
             '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(3) > span svg'
@@ -123,7 +128,7 @@ const main = async () => {
     console.time('query icons');
     await queryPageElements(getUrl(HOME_SLUG), '#__next ul li a', async (el) => {
         const hrefHandle = await el.getProperty('href');
-        const slug = (await hrefHandle.jsonValue()).replace(REACT_ICONS_BASE_URL, '');
+        const slug: string = (await hrefHandle.jsonValue()).replace(REACT_ICONS_BASE_URL, '');
         if (slug === HOME_SLUG) return;
 
         if (!/^\/react-icons\/icons\?name=[\S]+$/.test(slug)) {

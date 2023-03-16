@@ -12,6 +12,7 @@
   "author": "Arnaud PFUNDSTEIN",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^18.15.3",
     "puppeteer": "^19.7.3"
   },
   "dependencies": {

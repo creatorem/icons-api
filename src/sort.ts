@@ -1,15 +1,18 @@
+// @ts-ignore
 const fs = require('fs');
+// @ts-ignore
 const _ = require('lodash');
+// @ts-ignore
 const { getVariants } = require('./utils');
 
-const getDirectories = (source) => {
+const getDirectories = (source: string): string[] => {
     return fs
         .readdirSync(source, { withFileTypes: true })
         .filter((dirent) => dirent.isDirectory())
         .map((dirent) => dirent.name);
 };
 
-const getFiles = (source) => {
+const getFiles = (source: string): string[] => {
     return fs.readdirSync(source);
 };
 

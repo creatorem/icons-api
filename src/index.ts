@@ -1,22 +1,25 @@
+// @ts-ignore
 const fs = require('fs');
+// @ts-ignore
 const _ = require('lodash');
+// @ts-ignore
 const { getVariants, findSnakeVariant } = require('./scripts/utils');
 
 const app = require('express')();
 const PORT = 8080;
 
-const getDirectories = (source) => {
+const getDirectories = (source: string): void => {
     return fs
         .readdirSync(source, { withFileTypes: true })
-        .filter((dirent) => dirent.isDirectory())
-        .map((dirent) => dirent.name);
+        .filter((dirent: any) => dirent.isDirectory())
+        .map((dirent: any) => dirent.name);
 };
 
-const getFiles = (source) => {
+const getFiles = (source:string):void => {
     return fs
         .readdirSync(source, { withFileTypes: true })
-        .filter((dirent) => dirent.isFile())
-        .map((dirent) => dirent.name);
+        .filter((dirent:any) => dirent.isFile())
+        .map((dirent:any) => dirent.name);
 };
 
 const getFileContent = (source) => {
@@ -62,7 +65,7 @@ const getVariantIconData = (lib, name) => {
     const snakeVariants = getVariants(lib).map((variant) => _.snakeCase(variant));
 
     if (fs.existsSync(`./icons/${lib}/${name}`) && fs.statSync(`./icons/${lib}/${name}`).isDirectory()) {
-        icon.variants = {};
+        icon.variants = {} as any;
         const childFiles = getFiles(`./icons/${lib}/${name}`);
 
         for (const file of childFiles) {
@@ -250,6 +253,6 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
     res.status(200).send(icon);
 });
 
-console.log( fs.readdirSync('./icons') )
+console.log(fs.readdirSync('./icons'));
 
 app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));

@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/node': ^18.15.3
   express: ^4.18.2
   lodash: ^4.17.21
   puppeteer: ^19.7.3
@@ -10,6 +11,7 @@ dependencies:
   lodash: 4.17.21
 
 devDependencies:
+  '@types/node': 18.15.3
   puppeteer: 19.7.3
 
 packages:
@@ -35,16 +37,15 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@types/node/18.14.6:
-    resolution: {integrity: sha512-93+VvleD3mXwlLI/xASjw0FzKcwzl3OdTCzm1LaRfqgS21gfFtK3zDXM5Op9TeeMsJVOaJ2VRDpT9q4Y3d0AvA==}
+  /@types/node/18.15.3:
+    resolution: {integrity: sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==}
     dev: true
-    optional: true
 
   /@types/yauzl/2.10.0:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 18.14.6
+      '@types/node': 18.15.3
     dev: true
     optional: true
 
