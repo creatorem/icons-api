@@ -2,11 +2,12 @@
   "name": "icons-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/api.js",
   "scripts": {
-    "build": "node .",
-    "scrap": "node scripts/scraper.js",
-    "sort": "node scripts/sort.js"
+    "startAPI": "node build/api.js",
+    "scrap": "node build/scraper.js",
+    "sort": "node build/sort.js",
+    "build": "pnpm run scrap && pnpm run sort"
   },
   "keywords": [],
   "author": "Arnaud PFUNDSTEIN",
