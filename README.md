@@ -7,11 +7,12 @@ Icons are scraped from the [react-icons](https://react-icons.github.io/react-ico
 
 | Icon Library                                                            | License                                                                                           | Version                                  | Count |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----: |
+| [Mui icons](https://mui.com/material-ui/material-icons/   )             | [MIT](https://github.com/mui/material-ui/blob/master/LICENSE)              | 5.11.12                               | 10554 |
 | [Circum Icons](https://circumicons.com/)                                | [MPL-2.0 license](https://github.com/Klarr-Agency/Circum-Icons/blob/main/LICENSE)                 | a2924cb1ee37b9fa39ef023a36f1c884b3492e9b |   285 |
 | [Font Awesome](https://fontawesome.com/)                                | [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/)                                 | 5.15.4                                   |  1612 |
 | [Ionicons 4](https://ionicons.com/)                                     | [MIT](https://github.com/ionic-team/ionicons/blob/master/LICENSE)                                 | 4.6.3                                    |   696 |
 | [Ionicons 5](https://ionicons.com/)                                     | [MIT](https://github.com/ionic-team/ionicons/blob/master/LICENSE)                                 | 5.5.0                                    |  1332 |
-| [Mui icons](https://mui.com/material-ui/material-icons/   )             | [MIT](https://github.com/mui/material-ui/blob/master/LICENSE)              | 5.11.12                               | 10554 |
+| [Material Design icons](http://google.github.io/material-design-icons/) | [Apache License Version 2.0](https://github.com/google/material-design-icons/blob/master/LICENSE) | 4.0.0-61-g511eea577b                     |  4341 |
 | [Typicons](http://s-ings.com/typicons/)                                 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)                                   | 2.1.2                                    |   336 |
 | [Github Octicons icons](https://octicons.github.com/)                   | [MIT](https://github.com/primer/octicons/blob/master/LICENSE)                                     | 8.5.0                                    |   184 |
 | [Feather](https://feathericons.com/)                                    | [MIT](https://github.com/feathericons/feather/blob/master/LICENSE)                                | 4.28.0                                   |   286 |
@@ -38,33 +39,34 @@ Icons are scraped from the [react-icons](https://react-icons.github.io/react-ico
 ## Endpoints
 
 The *lib* parameter can take the following values : 
-- `ai`
-- `bi`
-- `bs`
-- `cg`
-- `ci`
-- `di`
-- `fa`
-- `fc`
-- `fi`
-- `gi`
-- `go`
-- `gr`
-- `hi`
-- `hi2`
-- `im`
-- `io`
-- `io5`
-- `md`
-- `ri`
-- `rx`
-- `si`
-- `sl`
-- `tb`
-- `tfi`
-- `ti`
-- `vsc`
-- `wi`
+- `ai` : Ant Design Icons
+- `bi` : BoxIcons
+- `bs` : Bootstrap Icons
+- `cg` : css.gg
+- `ci` : Circum Icons
+- `di` : Devicons
+- `fa` : Font Awesome 5
+- `fc` : Flat Color Icons
+- `fi` : Feather
+- `gi` : Game Icons
+- `go` : Github Octicons icons
+- `gr` : Grommet-Icons
+- `hi` : Heroicons
+- `hi2` : Heroicons 2
+- `im` : IcoMoon Free
+- `io` : Ionicons 4
+- `io5` : Ionicons 5
+- `md` : Material Design Icons
+- `mui` : Mui Icons
+- `ri` : Remix Icon
+- `rx` : Radix Icons
+- `si` : Simple Icons
+- `sl` : Simple Line Icons
+- `tb` : Tabler Icons
+- `tfi` : Themify Icons
+- `ti` : Typicons
+- `vsc` : VS Code Icons
+- `wi` : Weather Icons
 
 The *name* parameter represents the name of an icon.
 
@@ -79,9 +81,7 @@ This endpoints provide to single icons.
 - `/api/v1/all/:lib/:name`
 
 ## Todo
-- Separate `md` and `mui`.
 - Add link to lib in the rest api.
-- Use `typescript`.
 - Check security reflexes.
 
 ## Licence

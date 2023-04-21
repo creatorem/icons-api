@@ -9,7 +9,7 @@ const _ = require('lodash');
  * @returns
  */
 const getVariants = (slug: string): string[] => {
-    if (slug === 'md') {
+    if (slug === 'mui') {
         return ['Filled', 'Outlined', 'Rounded', 'Sharp', 'TwoTone'];
     } else if (slug === 'fa') {
         return ['Reg'];

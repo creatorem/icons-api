@@ -3,7 +3,7 @@ const fs = require('fs');
 // @ts-ignore
 const _ = require('lodash');
 // @ts-ignore
-const { getVariants, findSnakeVariant } = require('./scripts/utils');
+const { getVariants, findSnakeVariant } = require('./utils');
 
 const app = require('express')();
 const PORT = 8080;
