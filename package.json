@@ -5,6 +5,7 @@
   "type": "module",
   "main": "build/api.js",
   "scripts": {
+    "compile": "tsc --project tsconfig.json",
     "dev": "tsc -w --project tsconfig.json",
     "build": "tsc --project tsconfig.json && node build/scrap.js && node build/sort.js",
     "start": "node build/api.js"

@@ -2,6 +2,7 @@ import fs from 'fs';
 import _ from 'lodash';
 import express from 'express';
 import { getVariants, findSnakeVariant } from './utils.js';
+import { CREDIT_URLS } from './constants.js';
 
 const app: express.Express = express();
 
@@ -66,6 +67,7 @@ const getRawName = (lib: string, name: string): string => {
 interface Icon {
     name: string;
     svg: string | undefined;
+    credit: string | undefined;
 }
 
 interface IconVariant {
@@ -84,7 +86,13 @@ interface SortedIcon extends Icon {
 }
 
 const getVariantIconData = (lib: string, name: string): SortedIcon => {
-    const icon: SortedIcon = { name, defaultVariant: undefined, svg: undefined, variants: {} };
+    const icon: SortedIcon = {
+        name,
+        defaultVariant: undefined,
+        svg: undefined,
+        credit: CREDIT_URLS[lib],
+        variants: {},
+    };
     const snakeVariants = getVariants(lib).map((variant) => _.snakeCase(variant));
 
     if (fs.existsSync(`./icons/${lib}/${name}`) && fs.statSync(`./icons/${lib}/${name}`).isDirectory()) {
@@ -125,7 +133,7 @@ const getVariantIconData = (lib: string, name: string): SortedIcon => {
  * @returns
  */
 const getSingleIconData = (lib: string, name: string, rawName: string | null): Icon => {
-    const icon: Icon = { name, svg: undefined };
+    const icon: Icon = { name, svg: undefined, credit: CREDIT_URLS[lib] };
 
     if (
         rawName &&
@@ -316,4 +324,3 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
 console.log(fs.readdirSync('./icons'));
 
 app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));
- 
