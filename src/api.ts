@@ -1,40 +1,43 @@
-// @ts-ignore
-const fs = require('fs');
-// @ts-ignore
-const _ = require('lodash');
-// @ts-ignore
-const { getVariants, findSnakeVariant } = require('./utils');
+import fs from 'fs';
+import _ from 'lodash';
+import express from 'express';
+import { getVariants, findSnakeVariant } from './utils.js';
 
-const app = require('express')();
+const app: express.Express = express();
+
 const PORT = 8080;
 
-const getDirectories = (source: string): void => {
+const getDirectories = (source: string): string[] => {
     return fs
         .readdirSync(source, { withFileTypes: true })
-        .filter((dirent: any) => dirent.isDirectory())
-        .map((dirent: any) => dirent.name);
+        .filter((dirent: fs.Dirent) => dirent.isDirectory())
+        .map((dirent: fs.Dirent) => dirent.name);
 };
 
-const getFiles = (source:string):void => {
+const getFiles = (source: string): string[] => {
     return fs
         .readdirSync(source, { withFileTypes: true })
-        .filter((dirent:any) => dirent.isFile())
-        .map((dirent:any) => dirent.name);
+        .filter((dirent: fs.Dirent) => dirent.isFile())
+        .map((dirent: fs.Dirent) => dirent.name);
 };
 
-const getFileContent = (source) => {
+const getFileContent = (source: string): string => {
     return fs.readFileSync(source, { encoding: 'utf8', flag: 'r' });
 };
 
 const iconFolders = getDirectories('./icons');
 
-const limitLengthArray = (arr, start = undefined, end = undefined) => {
+const limitLengthArray = <T>(
+    arr: T[],
+    start: number | undefined = undefined,
+    end: number | undefined = undefined
+): T[] => {
     if (end !== undefined) arr = arr.slice(0, end);
     if (start !== undefined) arr = arr.slice(start);
     return arr;
 };
 
-const searchIcons = (lib, search) => {
+const searchIcons = (lib: string, search: string | undefined): string[] => {
     const children = fs.readdirSync(`./icons/${lib}`);
     if (!search) return children;
     const searchValue = search.toLowerCase().replace(/\s+/g, '');
@@ -48,7 +51,7 @@ const searchIcons = (lib, search) => {
  * @param string name
  * @returns
  */
-const getRawName = (lib, name) => {
+const getRawName = (lib: string, name: string): string => {
     const variants = getVariants(lib).map((variant) => _.snakeCase(variant));
     const rawName = _.upperFirst(
         _.camelCase(
@@ -60,12 +63,31 @@ const getRawName = (lib, name) => {
     return rawName;
 };
 
-const getVariantIconData = (lib, name) => {
-    const icon = { name, defaultVariant: undefined, svg: undefined, variants: false };
+interface Icon {
+    name: string;
+    svg: string | undefined;
+}
+
+interface IconVariant {
+    name: string;
+    variant: string;
+    svg: string;
+}
+
+interface SortedIcon extends Icon {
+    name: string;
+    defaultVariant: string | undefined;
+    svg: string | undefined;
+    variants: {
+        [key in string]: IconVariant;
+    };
+}
+
+const getVariantIconData = (lib: string, name: string): SortedIcon => {
+    const icon: SortedIcon = { name, defaultVariant: undefined, svg: undefined, variants: {} };
     const snakeVariants = getVariants(lib).map((variant) => _.snakeCase(variant));
 
     if (fs.existsSync(`./icons/${lib}/${name}`) && fs.statSync(`./icons/${lib}/${name}`).isDirectory()) {
-        icon.variants = {} as any;
         const childFiles = getFiles(`./icons/${lib}/${name}`);
 
         for (const file of childFiles) {
@@ -102,8 +124,8 @@ const getVariantIconData = (lib, name) => {
  * @param string|null rawName
  * @returns
  */
-const getSingleIconData = (lib, name, rawName) => {
-    const icon = { name, svg: undefined };
+const getSingleIconData = (lib: string, name: string, rawName: string | null): Icon => {
+    const icon: Icon = { name, svg: undefined };
 
     if (
         rawName &&
@@ -131,6 +153,17 @@ app.get('/api/v1/sorted/:lib', (req, res) => {
         return;
     }
 
+    if (
+        (search !== undefined && typeof search !== 'string') ||
+        (start !== undefined && typeof start !== 'string') ||
+        (end !== undefined && typeof end !== 'string')
+    ) {
+        res.status(403).send({
+            error: 'Search, start and end query must be a string.',
+        });
+        return;
+    }
+
     if (typeof search === 'string' && search.length < 3) {
         res.status(403).send({
             error: 'Enter at least 3 characters.',
@@ -138,10 +171,16 @@ app.get('/api/v1/sorted/:lib', (req, res) => {
         return;
     }
 
-    const matchedIcons = limitLengthArray(searchIcons(lib, search), undefined, end);
+    const matchedIcons = limitLengthArray(
+        searchIcons(lib, search),
+        undefined,
+        end ? parseInt(end, 10) : undefined
+    );
     const icons = matchedIcons.map((name) => getVariantIconData(lib, name.replace('.svg', '')));
 
-    res.status(200).send(limitLengthArray(icons, start, end));
+    res.status(200).send(
+        limitLengthArray(icons, start ? parseInt(start, 10) : undefined, end ? parseInt(end, 10) : undefined)
+    );
 });
 
 app.get('/api/v1/sorted/:lib/:name', (req, res) => {
@@ -176,6 +215,17 @@ app.get('/api/v1/all/:lib', (req, res) => {
         return;
     }
 
+    if (
+        (search !== undefined && typeof search !== 'string') ||
+        (start !== undefined && typeof start !== 'string') ||
+        (end !== undefined && typeof end !== 'string')
+    ) {
+        res.status(403).send({
+            error: 'Search, start and end query must be a string.',
+        });
+        return;
+    }
+
     let icons = [];
 
     if (search) {
@@ -186,7 +236,11 @@ app.get('/api/v1/all/:lib', (req, res) => {
             return;
         }
 
-        const matchedIcons = limitLengthArray(searchIcons(lib, search), undefined, end);
+        const matchedIcons = limitLengthArray(
+            searchIcons(lib, search),
+            undefined,
+            end ? parseInt(end, 10) : undefined
+        );
         icons = _.flatten(
             matchedIcons.map((child) => {
                 if (
@@ -203,7 +257,11 @@ app.get('/api/v1/all/:lib', (req, res) => {
             })
         );
     } else {
-        const directories = limitLengthArray(getDirectories(`./icons/${lib}`), undefined, end);
+        const directories = limitLengthArray(
+            getDirectories(`./icons/${lib}`),
+            undefined,
+            end ? parseInt(end, 10) : undefined
+        );
 
         icons = _.flatten(
             directories.map((rawName) => {
@@ -218,12 +276,14 @@ app.get('/api/v1/all/:lib', (req, res) => {
         const files = limitLengthArray(
             getFiles(`./icons/${lib}`),
             undefined,
-            end ? end - icons.length : undefined
+            end ? parseInt(end, 10) - icons.length : undefined
         );
         icons.push(...files.map((file) => getSingleIconData(lib, file.replace('.svg', ''), null)));
     }
 
-    res.status(200).send(limitLengthArray(icons, start, end));
+    res.status(200).send(
+        limitLengthArray(icons, start ? parseInt(start, 10) : undefined, end ? parseInt(end, 10) : undefined)
+    );
 });
 
 app.get('/api/v1/all/:lib/:name', (req, res) => {
@@ -256,3 +316,4 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
 console.log(fs.readdirSync('./icons'));
 
 app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));
+ 

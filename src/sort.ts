@@ -1,9 +1,6 @@
-// @ts-ignore
-const fs = require('fs');
-// @ts-ignore
-const _ = require('lodash');
-// @ts-ignore
-const { getVariants } = require('./utils');
+import fs from 'fs';
+import _ from 'lodash';
+import { getVariants } from './utils.js';
 
 const getDirectories = (source: string): string[] => {
     return fs
@@ -22,7 +19,9 @@ for (const slug of iconFolders) {
     const iconNames = getFiles(`./icons/${slug}`);
     const variants = getVariants(slug).map((variant) => _.snakeCase(variant));
 
-    const sortedIconTable = {};
+    const sortedIconTable: {
+        [key: string]: string[];
+    } = {};
 
     for (const iconName of iconNames) {
         const rawName = ('_' + _.snakeCase(iconName.replace('.svg', '')) + '_')
@@ -34,7 +33,7 @@ for (const slug of iconFolders) {
         sortedIconTable[rawName].push(iconName);
     }
 
-    for (rawName in sortedIconTable) {
+    for (const rawName in sortedIconTable) {
         if (sortedIconTable[rawName].length <= 1) continue;
         const folderName = _.upperFirst(_.camelCase(rawName));
         const newDirPath = `./icons/${slug}/${folderName}`;

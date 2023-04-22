@@ -1,5 +1,4 @@
-// @ts-ignore
-const _ = require('lodash');
+import _ from "lodash";
 
 /**
  * Get the variants for a library.
@@ -8,7 +7,7 @@ const _ = require('lodash');
  * @param string slug Library slug
  * @returns
  */
-const getVariants = (slug: string): string[] => {
+export const getVariants = (slug: string): string[] => {
     if (slug === 'mui') {
         return ['Filled', 'Outlined', 'Rounded', 'Sharp', 'TwoTone'];
     } else if (slug === 'fa') {
@@ -32,13 +31,8 @@ const getVariants = (slug: string): string[] => {
     return defaultVariants;
 };
 
-const findSnakeVariant = (str: string, snakeVariants: string[]): string => {
+export const findSnakeVariant = (str: string, snakeVariants: string[]): string => {
     const snakeStr = '_' + _.snakeCase(str) + '_';
     const variant = snakeVariants.find((variant) => snakeStr.includes('_' + variant.toLowerCase() + '_'));
     return variant || snakeVariants[0];
-};
-
-module.exports = {
-    getVariants,
-    findSnakeVariant,
 };

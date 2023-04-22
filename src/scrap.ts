@@ -1,6 +1,5 @@
-const puppeteer = require('puppeteer');
-// @ts-ignore
-const fs = require('fs');
+import fs from 'fs';
+import puppeteer from 'puppeteer';
 
 const dir = './icons';
 
@@ -69,7 +68,7 @@ const createFileStructure = (slugs: string[]): void => {
 };
 
 const writeIconFile = (slug: string, name: string, icon: string): void => {
-    fs.appendFile(`icons/${slug}/${name}.svg`, icon, function (err: Error) {
+    fs.appendFile(`icons/${slug}/${name}.svg`, icon, (err):void => {
         if (err) throw err;
     });
 };
