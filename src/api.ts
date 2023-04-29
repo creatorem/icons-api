@@ -1,10 +1,12 @@
 import fs from 'fs';
 import _ from 'lodash';
 import express from 'express';
+import cors from 'cors';
 import { getVariants, findSnakeVariant } from './utils.js';
 import { CREDIT_URLS } from './constants.js';
 
 const app: express.Express = express();
+app.use(cors());
 
 const PORT = 8080;
 
