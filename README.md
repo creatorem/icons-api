@@ -3,6 +3,13 @@
 REST API of svg icons.
 Icons are scraped from the [react-icons](https://react-icons.github.io/react-icons) project and the [Material UI](https://mui.com/material-ui/material-icons/) icons library.
 
+## Todos
+
+To fix deployment issues in cpanel:
+ - use common js syntax
+ - remove puppeteer from dependencies (try to move it in devDeps)
+ - rename api.js to app.js and move build to root
+
 ## Icons
 
 | Icon Library                                                            | License                                                                                           | Version                                  | Count |

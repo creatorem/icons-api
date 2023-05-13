@@ -68,7 +68,7 @@ const createFileStructure = (slugs: string[]): void => {
 };
 
 const writeIconFile = (slug: string, name: string, icon: string): void => {
-    fs.appendFile(`icons/${slug}/${name}.svg`, icon, (err):void => {
+    fs.appendFile(`icons/${slug}/${name}.svg`, icon, (err): void => {
         if (err) throw err;
     });
 };
@@ -99,7 +99,7 @@ const scrapMaterialDesignIcons = async () => {
 
     await queryPageElements(
         MUI_ICONS_URL,
-        '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(1) input[type="radio"]',
+        '#main-content .MuiGrid-root > form > div > label > span.MuiRadio-root > input[type="radio"]',
         async (el) => {
             const variant = await el.evaluate((element: any) => element.value);
             variants.push(variant.replace(/\s+/g, '+'));
@@ -110,7 +110,7 @@ const scrapMaterialDesignIcons = async () => {
     for (const variant of variants) {
         await queryPageElements(
             getMuiUrl(variant),
-            '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(3) > span',
+            '#main-content .MuiGrid-root:nth-child(2) > .MuiGrid-root.MuiGrid-item > div:nth-child(3) > span',
             async (el) => {
                 const iconEl = await el.$('svg');
                 const icon = await iconEl.evaluate((element: any) => element.outerHTML);
@@ -118,7 +118,7 @@ const scrapMaterialDesignIcons = async () => {
                 const name = await nameEl.evaluate((element: any) => element.innerText);
                 writeIconFile('mui', 'Mui' + name, icon);
             },
-            '#main-content > div:nth-child(6) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(3) > span svg'
+            '#main-content .MuiGrid-root:nth-child(2) > .MuiGrid-root.MuiGrid-item > div:nth-child(3) > span > svg'
         );
     }
 };

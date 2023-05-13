@@ -8,8 +8,6 @@ import { CREDIT_URLS } from './constants.js';
 const app: express.Express = express();
 app.use(cors());
 
-const PORT = 8080;
-
 const getDirectories = (source: string): string[] => {
     return fs
         .readdirSync(source, { withFileTypes: true })
@@ -323,8 +321,4 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
     res.status(200).send(icon);
 });
 
-console.log(fs.readdirSync('./icons'));
-
-app.listen(PORT, () => console.log(`Server is running.`));
-
-export default app;
+app.listen(process.env.PORT || 3000);
