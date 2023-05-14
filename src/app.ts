@@ -331,7 +331,7 @@ app.get('/api/v1/variants/:lib', (req, res) => {
         return;
     }
 
-    const variants = getVariants(lib);
+    const variants = getVariants(lib).map((variant) => variant[0].toLowerCase() + variant.slice(1));
     res.status(200).send(variants);
 });
 
