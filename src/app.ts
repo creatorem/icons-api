@@ -321,4 +321,18 @@ app.get('/api/v1/all/:lib/:name', (req, res) => {
     res.status(200).send(icon);
 });
 
+app.get('/api/v1/variants/:lib', (req, res) => {
+    const { lib } = req.params;
+
+    if (!iconFolders.includes(lib)) {
+        res.status(404).send({
+            error: 'Library not found.',
+        });
+        return;
+    }
+
+    const variants = getVariants(lib);
+    res.status(200).send(variants);
+});
+
 app.listen(process.env.PORT || 3000);
